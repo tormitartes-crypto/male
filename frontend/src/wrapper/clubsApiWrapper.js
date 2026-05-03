@@ -18,6 +18,23 @@ export async function fetchClubById(clubId) {
   }
 }
 
+export async function fetchClubBestPlayers(clubId) {
+    try {
+        const response = await apiClient.get(`/clubs/${clubId}/best-players`);
+
+        return response.data.map(player => {
+            return {
+                name: player.isik,
+                points: Number(player.punktisumma),
+                date: player.aeg
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching club best players', error);
+        return [];
+    }
+}
+
 export async function addClub(club) {
   try {
     await apiClient.post('/clubs', club);

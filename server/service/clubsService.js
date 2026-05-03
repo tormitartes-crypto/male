@@ -1,5 +1,13 @@
 const {pool} = require("../database")
-const {SELECT_ALL_CLUBS, SELECT_CLUB_BY_ID, SELECT_TOP_CLUBS, INSERT_CLUB, getAddOrUpdateClubQuery, DELETE_CLUB} = require("./queries");
+const {
+    SELECT_ALL_CLUBS,
+    SELECT_CLUB_BY_ID,
+    SELECT_TOP_CLUBS,
+    SELECT_CLUB_BEST_PLAYERS,
+    INSERT_CLUB,
+    getAddOrUpdateClubQuery,
+    DELETE_CLUB
+} = require("./queries");
 
 const getAllClubs = (req, res) => {
     console.log("IN - Get all clubs request")
@@ -53,6 +61,27 @@ const getTopClubs = (req, res) => {
     })
 }
 
+const getClubBestPlayers = (req, res) => {
+    const clubId = parseInt(req.params.id)
+
+    console.log(`IN - Get best players for club(id=${clubId}) request`)
+
+    pool.query(SELECT_CLUB_BEST_PLAYERS, [clubId], (err, results) => {
+        if (err) {
+            console.error(err)
+
+            return res.status(500).send({
+                message: "Error while reading best players for club with id: " + clubId,
+                error: err
+            })
+        }
+
+        console.log(`OUT - Get best players for club(id=${clubId}) result: ${JSON.stringify(results.rows)}`)
+
+        res.status(200).send(results.rows)
+    })
+}
+
 const addClub = (req, res) => {
     const {name, location, isUpdate, clubId} = req.body
     const update = JSON.parse(isUpdate)
@@ -96,4 +125,11 @@ const deleteClub = (req, res) => {
     })
 }
 
-module.exports = { getAllClubs, getClubById, addClub, getTopClubs, deleteClub }
+module.exports = {
+    getAllClubs,
+    getClubById,
+    addClub,
+    getTopClubs,
+    getClubBestPlayers,
+    deleteClub
+}

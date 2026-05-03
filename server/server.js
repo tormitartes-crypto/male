@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors')
 const {getAllPlayers, getPlayerById, getPlayersByClubId, getPlayerStatistics, addPlayer, getTopPlayers, deletePlayer} = require("./service/playersService");
-const {getAllClubs, getClubById, addClub, getTopClubs, deleteClub} = require("./service/clubsService");
+const {getAllClubs, getClubById, addClub, getTopClubs, getClubBestPlayers, deleteClub} = require("./service/clubsService");
 const {getAllTournaments, getTournamentById, addTournament, getOngoingTournaments, deleteTournament} = require("./service/tournamentsService");
 const {getMatchByTournamentId, addMatchToTournament, getOngoingMatches, getMatchById} = require("./service/matchesService");
 const {getAllLocations} = require("./service/locationsService");
@@ -28,6 +28,7 @@ app.delete("/api/players/:playerId", deletePlayer)
 app.get("/api/clubs", getAllClubs)
 app.get("/api/clubs/:id", getClubById)
 app.get("/api/clubs/top/:limit", getTopClubs)
+app.get("/api/clubs/:id/best-players", getClubBestPlayers)
 app.post("/api/clubs", addClub)
 app.delete("/api/clubs/:clubId", deleteClub)
 
